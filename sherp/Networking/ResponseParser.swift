@@ -12,17 +12,17 @@ struct ResponseParser {
 }
 
 extension ResponseParser {
-    func parse() -> Result<SomeDto, ApiError> {
-        guard let data = data else {
-            return .failure(.dataParsing)
-        }
-
-        let decoder = JSONDecoder()
-
-        guard let dto = try? decoder.decode(SomeDto.self, from: data) else {
-            return .failure(.dataParsing)
-        }
-
-        return .success(dto)
-    }
+//    func parse() -> Result<SomeDto, ApiError> {
+//        guard let data = data else {
+//            return .failure(.dataParsing)
+//        }
+//
+//        let decoder = JSONDecoder()
+//
+//        guard let dto = try? decoder.decode(SomeDto.self, from: data) else {
+//            return .failure(.dataParsing)
+//        }
+//
+//        return .success(dto)
+//    }
 }

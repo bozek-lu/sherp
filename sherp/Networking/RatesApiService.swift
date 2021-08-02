@@ -16,14 +16,14 @@ final class RatesApiService: RatesApiServiceProtocol {
     func get(completion: @escaping () -> Void) {
         
         guard let url = UrlBuilder.albums.build() else {
-            return completion(.failure(.urlCreation))
+            return //completion(.failure(.urlCreation))
         }
         let task = URLSession.shared.dataTask(with: url) { data, _, _ in
-            let parser = ResponseParser(data: data)
-            let result = parser.parse()
+//            let parser = ResponseParser(data: data)
+//            let result = parser.parse()
 
             DispatchQueue.main.async {
-                completion(result)
+                completion()
             }
         }
         task.resume()
