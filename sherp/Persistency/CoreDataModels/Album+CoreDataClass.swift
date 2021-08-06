@@ -2,7 +2,7 @@
 //  Album+CoreDataClass.swift
 //  sherp
 //
-//  Created by Łukasz Bożek on 02/08/2021.
+//  Created by Łukasz Bożek on 07/08/2021.
 //
 //
 

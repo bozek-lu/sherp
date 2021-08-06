@@ -16,7 +16,13 @@ final class DetailViewViewController: UIViewController {
     
     var presenter: DetailViewBusinessLogic?
     
-    private var postElements = [PostElement]()
+    private lazy var loader: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView(style: .large)
+        view.color = .white
+        view.hidesWhenStopped = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     
     private lazy var tableView: UITableView = {
         let view = UITableView()
@@ -29,6 +35,7 @@ final class DetailViewViewController: UIViewController {
         view.backgroundColor = .black
         let safe = navigationController?.view.safeAreaInsets ?? view.safeAreaInsets
         view.contentInset = .init(top: 10, left: 0, bottom: safe.bottom, right: 0)
+        view.isHidden = true
         return view
     }()
     
@@ -42,6 +49,8 @@ final class DetailViewViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    
+    private var postElements = [PostElement]()
     
     override func viewDidLoad() {
         setupViews()
@@ -59,6 +68,7 @@ final class DetailViewViewController: UIViewController {
         navigationController?.navigationBar.barTintColor = .black
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
 
+        view.addSubview(tableView)
         view.addSubview(emptyLabel)
     }
     
@@ -67,16 +77,27 @@ final class DetailViewViewController: UIViewController {
         emptyLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         emptyLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         emptyLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        
+        tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
+        tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
     }
 }
 
 extension DetailViewViewController: DetailViewDisplayLogic {
     func display(postDetails: [PostElement]) {
-        
+        loader.stopAnimating()
+        tableView.isHidden = false
+        emptyLabel.isHidden = true
+        postElements = postDetails
+        tableView.reloadData()
     }
     
     func displayError() {
-        
+        loader.stopAnimating()
+        tableView.isHidden = true
+        emptyLabel.isHidden = false
     }
 }
 
@@ -92,6 +113,11 @@ extension DetailViewViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        UITableViewCell()
+        let model = postElements[indexPath.row]
+        let cell: PostDetailCell? = tableView.dequeue(PostDetailCell.self, for: indexPath)
+        if let model = model as? PostViewModel.Details {
+            cell?.populate(with: model)
+        }
+        return cell ?? UITableViewCell()
     }
 }

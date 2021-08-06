@@ -2,7 +2,7 @@
 //  Album+CoreDataProperties.swift
 //  sherp
 //
-//  Created by Łukasz Bożek on 02/08/2021.
+//  Created by Łukasz Bożek on 07/08/2021.
 //
 //
 
@@ -16,9 +16,9 @@ extension Album {
         return NSFetchRequest<Album>(entityName: "Album")
     }
 
-    @NSManaged public var userId: Int16
     @NSManaged public var id: Int16
     @NSManaged public var title: String?
+    @NSManaged public var userId: Int16
     @NSManaged public var photos: NSSet?
     @NSManaged public var user: User?
 

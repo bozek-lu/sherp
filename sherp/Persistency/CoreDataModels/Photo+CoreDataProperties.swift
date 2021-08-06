@@ -2,7 +2,7 @@
 //  Photo+CoreDataProperties.swift
 //  sherp
 //
-//  Created by Łukasz Bożek on 02/08/2021.
+//  Created by Łukasz Bożek on 07/08/2021.
 //
 //
 
@@ -18,9 +18,9 @@ extension Photo {
 
     @NSManaged public var albumId: Int16
     @NSManaged public var id: Int16
+    @NSManaged public var thumbnailUrl: URL?
     @NSManaged public var title: String?
     @NSManaged public var url: URL?
-    @NSManaged public var thumbnailUrl: URL?
     @NSManaged public var album: Album?
 
 }

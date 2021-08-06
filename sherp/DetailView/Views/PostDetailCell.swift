@@ -21,7 +21,7 @@ final class PostDetailCell: UITableViewCell {
     private lazy var bodyLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 20)
-        label.textColor = .darkGray
+        label.textColor = .lightGray
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

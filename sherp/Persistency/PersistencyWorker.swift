@@ -85,7 +85,8 @@ extension PersistencyWorker: PersistencyProtocol {
     }
     
     func post(with id: Int16, completion: @escaping (Result<Post, PostError>) -> Void) {
-        managedObjectContext.perform {
+        let context = managedObjectContext
+        context.perform {
             // setup fetch request
             let fetchRequest: NSFetchRequest<Post> = Post.fetchRequest()
             fetchRequest.predicate = NSPredicate(format: "id == %i", id)
@@ -94,7 +95,7 @@ extension PersistencyWorker: PersistencyProtocol {
             fetchRequest.fetchLimit = 1
             
             do {
-                guard let managed = try self.managedObjectContext.fetch(fetchRequest).first else {
+                guard let managed = try context.fetch(fetchRequest).first else {
                     completion(.failure(.dbFail))
                     return
                 }
@@ -112,6 +113,14 @@ extension PersistencyWorker: PersistencyProtocol {
         let managedAlbums = createAlbums(with: albums, photos: managedPhotos)
         let managedUsers = createUsers(with: users, albums: managedAlbums)
         createPosts(with: posts, users: managedUsers)
+        
+        do {
+            if backgroundManagedObjectContext.hasChanges {
+                try backgroundManagedObjectContext.save()
+            }
+        } catch {
+            print("Failed to save to Core Data: \(error).")
+        }
     }
     
     private func createUsers(with users: [UserModel], albums: [Album]) -> [User] {

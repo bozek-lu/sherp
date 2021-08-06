@@ -2,7 +2,7 @@
 //  User+CoreDataProperties.swift
 //  sherp
 //
-//  Created by Łukasz Bożek on 02/08/2021.
+//  Created by Łukasz Bożek on 07/08/2021.
 //
 //
 
@@ -16,9 +16,9 @@ extension User {
         return NSFetchRequest<User>(entityName: "User")
     }
 
+    @NSManaged public var email: String?
     @NSManaged public var id: Int16
     @NSManaged public var name: String?
-    @NSManaged public var email: String?
     @NSManaged public var username: String?
     @NSManaged public var posts: NSSet?
     @NSManaged public var albums: NSSet?
@@ -39,8 +39,13 @@ extension User {
 
     @objc(removePosts:)
     @NSManaged public func removeFromPosts(_ values: NSSet)
-    
-    @objc(addToAlbumsObject:)
+
+}
+
+// MARK: Generated accessors for albums
+extension User {
+
+    @objc(addAlbumsObject:)
     @NSManaged public func addToAlbums(_ value: Album)
 
     @objc(removeAlbumsObject:)
