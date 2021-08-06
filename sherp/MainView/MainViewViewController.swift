@@ -40,13 +40,17 @@ final class MainViewViewController: UIViewController {
         let bar = UISearchBar()
         bar.backgroundImage = UIImage()
         bar.searchTextField.leftView?.tintColor = .white
+        bar.searchTextField.textColor = .white
         bar.searchTextField.placeholder = "Search posts..."
         bar.translatesAutoresizingMaskIntoConstraints = false
+        bar.searchTextField.addTarget(self, action: #selector(searchTextFieldDidChange), for: [.editingChanged, .valueChanged])
+        bar.searchTextField.delegate = self
         return bar
     }()
     
     private lazy var tableView: UITableView = {
         let view = UITableView()
+        view.keyboardDismissMode = .onDrag
         view.rowHeight = UITableView.automaticDimension
         view.estimatedRowHeight = 70
         view.register(PostCell.self)
@@ -98,10 +102,6 @@ final class MainViewViewController: UIViewController {
         setupViews()
         super.viewDidLoad()
         view.backgroundColor = .black
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         setupConstraints()
         viewState = .loading
         presenter?.fetchViewModels()
@@ -136,6 +136,17 @@ final class MainViewViewController: UIViewController {
         
         loader.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         loader.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+    }
+    
+    @objc private func searchTextFieldDidChange(_ textField: UITextField) {
+        presenter?.searchDidChange(string: textField.text ?? "")
+    }
+}
+
+extension MainViewViewController: UITextFieldDelegate {
+    func textFieldShouldClear(_ textField: UITextField) -> Bool {
+        presenter?.searchDidChange(string: textField.text ?? "")
+        return true
     }
 }
 

@@ -56,10 +56,6 @@ final class DetailViewViewController: UIViewController {
         setupViews()
         super.viewDidLoad()
         view.backgroundColor = .darkGray
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         setupConstraints()
     }
     
