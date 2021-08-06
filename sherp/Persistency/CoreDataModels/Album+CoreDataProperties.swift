@@ -20,6 +20,7 @@ extension Album {
     @NSManaged public var id: Int16
     @NSManaged public var title: String?
     @NSManaged public var photos: NSSet?
+    @NSManaged public var user: User?
 
 }
 

@@ -8,20 +8,15 @@
 import UIKit
 
 final class MainSceneAssembly {
-    static func getViewController() -> SplitViewController {
+    static func getViewController() -> UIViewController {
         let controller = SplitViewController()
-        let mainView = MainViewViewController()
-        let detailView = DetailViewController()
-        controller.viewControllers = [mainView, detailView]
-//        let apiService = RatesApiService()
-//        let worker = RatesWorker(apiService: apiService)
-//        let router = RatesRouter()
-//        let presenter = RatesPresenter(worker: worker)
-//        router.dataStore = presenter
-//        router.viewController = controller
-//        controller.presenter = presenter
-//        controller.router = router
-//        presenter.viewController = controller
+        let mainView = MainViewAssembly.getViewController()
+        let detailView = DetailViewAssembly.getViewController()
+        
+        mainView.delegate = detailView
+        
+        controller.viewControllers = [UINavigationController(rootViewController: mainView),
+                                      UINavigationController(rootViewController: detailView)]
         return controller
     }
 }
