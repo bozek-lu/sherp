@@ -11,7 +11,7 @@ final class PostCell: UITableViewCell {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 26)
+        label.font = UIFont.systemFont(ofSize: 20)
         label.textColor = .white
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -20,7 +20,7 @@ final class PostCell: UITableViewCell {
     
     private lazy var emailLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 20)
+        label.font = UIFont.systemFont(ofSize: 16)
         label.textColor = .lightGray
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -35,7 +35,7 @@ final class PostCell: UITableViewCell {
     }
     
     init(frame: CGRect) {
-        super.init(style: .default, reuseIdentifier: "TagAricleCell")
+        super.init(style: .default, reuseIdentifier: "PostCell")
         self.frame = frame
         setUp()
     }
@@ -51,6 +51,13 @@ final class PostCell: UITableViewCell {
         setupConstraints()
     }
     
+    func populate(with model: MainViewModels.Post) {
+        titleLabel.text = model.title
+        emailLabel.text = model.email
+    }
+}
+
+extension PostCell {
     private func setupViews() {
         let selectedView = UIView()
         selectedView.backgroundColor = .darkGray
@@ -60,18 +67,17 @@ final class PostCell: UITableViewCell {
     }
     
     private func setupConstraints() {
-        titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20).isActive = true
+        titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15).isActive = true
         titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10).isActive = true
         titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10).isActive = true
         
         emailLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10).isActive = true
-        emailLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10).isActive = true
         emailLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10).isActive = true
-        emailLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10).isActive = true
-    }
-    
-    func populate(with model: PostViewModel.Simple) {
-        titleLabel.text = model.title
-        emailLabel.text = model.email
+        emailLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15).isActive = true
+        let emailToBottom = emailLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
+        // Some titles are bigger than estimated value
+        // to avoid constraints errors priority is changed
+        emailToBottom.priority = .defaultHigh
+        emailToBottom.isActive = true
     }
 }

@@ -15,8 +15,7 @@ final class MainSceneAssembly {
         
         mainView.delegate = detailView
         
-        controller.viewControllers = [UINavigationController(rootViewController: mainView),
-                                      UINavigationController(rootViewController: detailView)]
+        controller.viewControllers = [UINavigationController(rootViewController: mainView), detailView]
         return controller
     }
 }

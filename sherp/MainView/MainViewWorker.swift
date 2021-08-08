@@ -9,7 +9,8 @@ import Foundation
 import Combine
 
 protocol MainViewWorkerProtocol {
-    func fetchData(completion: @escaping (Result<[PostViewModel.Simple], PostError>) -> Void)
+    func fetchData(completion: @escaping (Result<[MainViewModels.Post], PostError>) -> Void)
+    func removePost(with id: Int16)
 }
 
 final class MainViewWorker {
@@ -50,15 +51,15 @@ final class MainViewWorker {
     
     private func combine(posts: [PostModel], users: [UserModel],
                          albums: [AlbumModel], photos: [PhotoModel],
-                         completion: (Result<[PostViewModel.Simple], PostError>) -> Void) {
+                         completion: (Result<[MainViewModels.Post], PostError>) -> Void) {
         let posts: [PostModel] = posts.map {
             var post = $0
             post.user = users.first(where: { $0.id == post.userId })
             return post
         }
         let postModels = posts.map {
-            PostViewModel.Simple(id: $0.id, title: $0.title ?? "--Missing title--",
-                                 email: $0.user?.email ?? "--Missing email--")
+            MainViewModels.Post(id: $0.id, title: $0.title ?? "-- Missing title --",
+                                email: $0.user?.email ?? "-- Missing email --")
         }
         completion(postModels.isEmpty ? .failure(.fetchingFail) : .success(postModels))
         persistencyWorker.saveAndMerge(posts: posts, users: users,
@@ -67,7 +68,7 @@ final class MainViewWorker {
 }
 
 extension MainViewWorker: MainViewWorkerProtocol {
-    func fetchData(completion: @escaping (Result<[PostViewModel.Simple], PostError>) -> Void) {
+    func fetchData(completion: @escaping (Result<[MainViewModels.Post], PostError>) -> Void) {
         Publishers.Zip4(fetchPosts(), fetchUsers(), fetchAlbums(), fetchPhotos())
             .sink(receiveValue: { [weak self] (posts, users, albums, photos) in
                 self?.combine(posts: posts, users: users,
@@ -75,5 +76,9 @@ extension MainViewWorker: MainViewWorkerProtocol {
                               completion: completion)
             })
             .store(in: &cancellables)
+    }
+    
+    func removePost(with id: Int16) {
+        persistencyWorker.removePost(with: id)
     }
 }

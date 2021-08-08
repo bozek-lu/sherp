@@ -11,6 +11,7 @@ protocol MainViewBusinessLogic {
     func fetchViewModels()
     func selectedPost(at row: Int)
     func searchDidChange(string: String)
+    func deletePost(at row: Int)
 }
 
 final class MainViewPresenter {
@@ -20,8 +21,8 @@ final class MainViewPresenter {
     weak var viewController: MainViewDisplayLogic?
     
     private var filterString = ""
-    private var displayedPosts = [PostViewModel.Simple]()
-    private var filteredPosts = [PostViewModel.Simple]()
+    private var displayedPosts = [MainViewModels.Post]()
+    private var filteredPosts = [MainViewModels.Post]()
     
     init(worker: MainViewWorkerProtocol) {
         self.worker = worker
@@ -38,6 +39,10 @@ final class MainViewPresenter {
         }
         
         viewController?.display(posts: filteredPosts)
+    }
+    
+    private func post(at row: Int) -> MainViewModels.Post {
+        filterString.isEmpty ? displayedPosts[row] : filteredPosts[row]
     }
 }
 
@@ -60,17 +65,15 @@ extension MainViewPresenter: MainViewBusinessLogic {
     }
     
     func selectedPost(at row: Int) {
-        let post: PostViewModel.Simple
-        if filterString.isEmpty {
-            post = displayedPosts[row]
-        } else {
-            post = filteredPosts[row]
-        }
-        viewController?.openPost(with: post.id)
+        viewController?.openPost(with: post(at: row).id)
     }
     
     func searchDidChange(string: String) {
         filterString = string
         updateResults()
+    }
+    
+    func deletePost(at row: Int) {
+        worker.removePost(with: post(at: row).id)
     }
 }

@@ -18,14 +18,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
-    // MARK: - Core Data stack
-
-
     // MARK: - Core Data Saving support
 
     func saveContext () {
         PersistencyWorker.shared.save()
     }
-
 }
 

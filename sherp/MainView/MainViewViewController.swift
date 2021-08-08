@@ -8,7 +8,7 @@
 import UIKit
 
 protocol MainViewDisplayLogic: AnyObject {
-    func display(posts: [PostViewModel.Simple])
+    func display(posts: [MainViewModels.Post])
     func displayError()
     func openPost(with id: Int16)
 }
@@ -52,7 +52,8 @@ final class MainViewViewController: UIViewController {
         let view = UITableView()
         view.keyboardDismissMode = .onDrag
         view.rowHeight = UITableView.automaticDimension
-        view.estimatedRowHeight = 70
+        view.estimatedRowHeight = 55
+        view.allowsSelectionDuringEditing = true
         view.register(PostCell.self)
         view.delegate = self
         view.dataSource = self
@@ -74,7 +75,7 @@ final class MainViewViewController: UIViewController {
         return label
     }()
     
-    private var postModels = [PostViewModel.Simple]()
+    private var postModels = [MainViewModels.Post]()
     
     private var viewState = ViewState.loading {
         didSet {
@@ -105,6 +106,12 @@ final class MainViewViewController: UIViewController {
         setupConstraints()
         viewState = .loading
         presenter?.fetchViewModels()
+        
+        setupObserver()
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     private func setupViews() {
@@ -138,6 +145,19 @@ final class MainViewViewController: UIViewController {
         loader.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
     }
     
+    private func setupObserver() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(appBecomeActive),
+            name: UIApplication.didBecomeActiveNotification,
+            object: nil
+        )
+    }
+    
+    @objc private func appBecomeActive() {
+        presenter?.fetchViewModels()
+    }
+    
     @objc private func searchTextFieldDidChange(_ textField: UITextField) {
         presenter?.searchDidChange(string: textField.text ?? "")
     }
@@ -151,7 +171,7 @@ extension MainViewViewController: UITextFieldDelegate {
 }
 
 extension MainViewViewController: MainViewDisplayLogic {
-    func display(posts: [PostViewModel.Simple]) {
+    func display(posts: [MainViewModels.Post]) {
         postModels = posts
         tableView.reloadData()
         viewState = .data
@@ -184,5 +204,20 @@ extension MainViewViewController: UITableViewDataSource {
         let cell: PostCell? = tableView.dequeue(PostCell.self, for: indexPath)
         cell?.populate(with: model)
         return cell ?? UITableViewCell()
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        switch editingStyle {
+        case .delete:
+            postModels.remove(at: indexPath.row)
+            presenter?.deletePost(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        default:
+            break
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        true
     }
 }

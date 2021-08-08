@@ -8,6 +8,8 @@
 import UIKit
 
 final class SplitViewController: UISplitViewController {
+    private var shouldCollapse = true
+    
     override func viewDidLoad() {
         delegate = self
         preferredDisplayMode = .oneBesideSecondary
@@ -21,6 +23,10 @@ extension SplitViewController: UISplitViewControllerDelegate {
     }
     
     func splitViewController(_ splitViewController: UISplitViewController, collapseSecondary secondaryViewController: UIViewController, onto primaryViewController: UIViewController) -> Bool {
-        return true
+        // Making sure that on the phone, only the app opening lands on main view
+        defer {
+            shouldCollapse = false
+        }
+        return shouldCollapse
     }
 }

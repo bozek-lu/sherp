@@ -5,35 +5,50 @@
 //  Created by Łukasz Bożek on 06/08/2021.
 //
 
-import Foundation
+import UIKit
+import Combine
 
 protocol DetailWorkerProtocol {
-    func fetchPost(with id: Int16, completion: @escaping (Result<[PostElement], PostError>) -> Void)
+    func fetchPost(with id: Int16, completion: @escaping (Result<Post, PostError>) -> Void)
+    func loadImage(for url: URL, completion: @escaping (UIImage?) -> Void)
+    func cancelImageLoad(for url: URL)
 }
 
 final class DetailViewWorker {
     private let persistency: PersistencyProtocol
+    private let imageLoader: ImageLoaderProtocol
     
-    init(persistency: PersistencyProtocol) {
+    private var cancellables = [URL: AnyCancellable]()
+    
+    init(persistency: PersistencyProtocol, imageLoader: ImageLoaderProtocol) {
         self.persistency = persistency
-    }
-    
-    private func parse(model: Post) -> [PostElement] {
-        [PostViewModel.Details(title: model.title ?? "--Missing title--",
-                               body: model.body ?? "--Missing body--")]
+        self.imageLoader = imageLoader
     }
 }
 
 extension DetailViewWorker: DetailWorkerProtocol {
-    func fetchPost(with id: Int16, completion: @escaping (Result<[PostElement], PostError>) -> Void) {
-        persistency.post(with: id) { [weak self] result in
-            guard let self = self else { return }
+    func fetchPost(with id: Int16, completion: @escaping (Result<Post, PostError>) -> Void) {
+        persistency.post(with: id) { result in
             switch result {
             case .success(let post):
-                completion(.success(self.parse(model: post)))
+                completion(.success(post))
             case .failure(let error):
                 completion(.failure(error))
             }
         }
+    }
+    
+    func loadImage(for url: URL, completion: @escaping (UIImage?) -> Void) {
+        let loading = imageLoader.loadImage(from: url)
+            .sink { image in
+                completion(image)
+            }
+        
+        cancellables[url] = loading
+    }
+    
+    func cancelImageLoad(for url: URL) {
+        cancellables[url]?.cancel()
+        cancellables[url] = nil
     }
 }
