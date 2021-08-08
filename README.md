@@ -1,4 +1,4 @@
 # sherp
 
-## Sherplay coding challenge
+## Sherpany coding challenge
 - No need for setup
