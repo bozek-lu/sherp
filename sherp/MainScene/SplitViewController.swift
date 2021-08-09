@@ -24,6 +24,7 @@ extension SplitViewController: UISplitViewControllerDelegate {
     
     func splitViewController(_ splitViewController: UISplitViewController, collapseSecondary secondaryViewController: UIViewController, onto primaryViewController: UIViewController) -> Bool {
         // Making sure that on the phone, only the app opening lands on main view
+        // and any other change will open post details
         defer {
             shouldCollapse = false
         }

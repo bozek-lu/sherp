@@ -201,7 +201,7 @@ extension MainViewViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let model = postModels[indexPath.row]
-        let cell: PostCell? = tableView.dequeue(PostCell.self, for: indexPath)
+        let cell = tableView.dequeue(PostCell.self, for: indexPath)
         cell?.populate(with: model)
         return cell ?? UITableViewCell()
     }

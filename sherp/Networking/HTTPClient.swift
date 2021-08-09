@@ -42,7 +42,7 @@ final class HTTPClient: HTTPClientProtocol {
         session.dataTaskPublisher(for: request.asURLRequest())
             .map { HTTPResponse($0.data, $0.response) }
             .mapError { error -> RequestError in
-                return RequestError.fetchingFailed
+                RequestError.fetchingFailed
             }
             .eraseToAnyPublisher()
     }

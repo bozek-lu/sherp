@@ -23,10 +23,6 @@ class MainViewPresenterTests: XCTestCase {
         sut.viewController = viewController
     }
     
-    override func tearDown() {
-        super.tearDown()
-    }
-    
     func testFetchingData() {
         // Given
         worker.fetchDataReturn = .success(Seeds.mainPosts())

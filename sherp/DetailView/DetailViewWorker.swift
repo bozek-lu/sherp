@@ -18,7 +18,7 @@ final class DetailViewWorker {
     private let persistency: PersistencyProtocol
     private let imageLoader: ImageLoaderProtocol
     
-    private var cancellables = [URL: AnyCancellable]()
+    private var cancellable = [URL: AnyCancellable]()
     
     init(persistency: PersistencyProtocol, imageLoader: ImageLoaderProtocol) {
         self.persistency = persistency
@@ -44,11 +44,11 @@ extension DetailViewWorker: DetailWorkerProtocol {
                 completion(image)
             }
         
-        cancellables[url] = loading
+        cancellable[url] = loading
     }
     
     func cancelImageLoad(for url: URL) {
-        cancellables[url]?.cancel()
-        cancellables[url] = nil
+        cancellable[url]?.cancel()
+        cancellable[url] = nil
     }
 }

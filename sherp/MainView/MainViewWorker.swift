@@ -18,7 +18,7 @@ final class MainViewWorker {
     private let httpClient: HTTPClientProtocol
     private let persistencyWorker: PersistencyProtocol
     
-    private var cancellables = [AnyCancellable]()
+    private var cancellable = [AnyCancellable]()
     
     init(httpClient: HTTPClientProtocol, persistencyWorker: PersistencyProtocol) {
         self.httpClient = httpClient
@@ -26,22 +26,22 @@ final class MainViewWorker {
     }
     
     private func fetchPosts() -> AnyPublisher<[PostModel], Never> {
-        fetch(for: .posts)
+        fetch(.posts)
     }
     
     private func fetchUsers() -> AnyPublisher<[UserModel], Never> {
-        fetch(for: .users)
+        fetch(.users)
     }
     
     private func fetchAlbums() -> AnyPublisher<[AlbumModel], Never> {
-        fetch(for: .albums)
+        fetch(.albums)
     }
     
     private func fetchPhotos() -> AnyPublisher<[PhotoModel], Never> {
-        fetch(for: .photos)
+        fetch(.photos)
     }
     
-    private func fetch<T: Decodable>(for request: SherpRequest) -> AnyPublisher<[T], Never> {
+    private func fetch<T: Decodable>(_ request: SherpRequest) -> AnyPublisher<[T], Never> {
         httpClient.httpTask(with: request)
             .map { $0.data }
             .decode(type: [T].self, decoder: JSONDecoder())
@@ -75,7 +75,7 @@ extension MainViewWorker: MainViewWorkerProtocol {
                               albums: albums, photos: photos,
                               completion: completion)
             })
-            .store(in: &cancellables)
+            .store(in: &cancellable)
     }
     
     func removePost(with id: Int16) {

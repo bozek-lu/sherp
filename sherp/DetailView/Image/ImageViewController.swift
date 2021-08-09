@@ -27,7 +27,7 @@ final class ImageViewController: UIViewController {
         return view
     }()
     
-    private var cancellables = [AnyCancellable]()
+    private var cancellable = [AnyCancellable]()
     
     init(imageURL: URL, imageLoader: ImageLoaderProtocol) {
         self.imageURL = imageURL
@@ -49,7 +49,7 @@ final class ImageViewController: UIViewController {
                 self?.imageView.image = image
                 self?.loader.stopAnimating()
             }
-            .store(in: &cancellables)
+            .store(in: &cancellable)
     }
     
     private func setupViews() {
