@@ -50,7 +50,9 @@ should take that, otherwise load from web and update the photo cell.
 12. ✅ In general, provide UI feedback where you see fit.
 #### Bonus points
 ● ✅ It would be nice to be able to show/hide the photos of an album. All albums are collapsed in the default state.
+
 ● ✅ Because the collection of photos can get quite long, we would like the headers to stick to the top.
+
 ● ✅ Include a search bar to search in the master view and provide live feedback to the user while searching.
 
 ## Improvements log
@@ -60,5 +62,5 @@ should take that, otherwise load from web and update the photo cell.
 
 Two elements from list were not fixed, I don't have iPad with me and I can't reproduce constraint errors. Second issue is missing loader at first fetching of posts, It is loading quite fast for me but I still can see it
 ![](https://user-images.githubusercontent.com/5692182/131255297-a657d3d7-4939-4dab-83ab-14d6571baa65.png)
-- [x] Several constraints errors when running on the iPad
-- [x] The spinner (loader) during initial load (i.e. while data is being fetched) isn't visible; (user is left staring at a view with "Challenge accepted" label)
+- [ ] Several constraints errors when running on the iPad
+- [ ] The spinner (loader) during initial load (i.e. while data is being fetched) isn't visible; (user is left staring at a view with "Challenge accepted" label)
