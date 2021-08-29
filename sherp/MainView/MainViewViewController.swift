@@ -9,9 +9,11 @@ import UIKit
 
 protocol MainViewDisplayLogic: AnyObject {
     func display(posts: [MainViewModels.Post])
-    func displayError()
+    func displayError(with message: String)
     func openPost(with id: Int16)
     func removePostSelection()
+    func restoreSelection(at index: IndexPath)
+    func resetSearch()
 }
 
 enum ViewState {
@@ -65,7 +67,7 @@ final class MainViewViewController: UIViewController {
         return view
     }()
     
-    private lazy var emptyLabel: UILabel = {
+    private lazy var errorLabel: UILabel = {
         let label = UILabel()
         label.text = "Failed to load posts"
         label.textAlignment = .center
@@ -84,17 +86,17 @@ final class MainViewViewController: UIViewController {
             case .data:
                 tableView.isHidden = false
                 searchBar.isHidden = false
-                emptyLabel.isHidden = true
+                errorLabel.isHidden = true
                 loader.stopAnimating()
             case .error:
                 tableView.isHidden = true
                 searchBar.isHidden = true
-                emptyLabel.isHidden = false
+                errorLabel.isHidden = false
                 loader.stopAnimating()
             case .loading:
                 tableView.isHidden = true
                 searchBar.isHidden = true
-                emptyLabel.isHidden = true
+                errorLabel.isHidden = true
                 loader.startAnimating()
             }
         }
@@ -117,25 +119,26 @@ final class MainViewViewController: UIViewController {
     
     private func setupViews() {
         navigationItem.title = "Challenge Accepted!"
+        navigationController?.navigationBar.isTranslucent = false
         navigationController?.navigationBar.barTintColor = .black
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
 
-        view.addSubview(emptyLabel)
+        view.addSubview(errorLabel)
         view.addSubview(searchBar)
         view.addSubview(tableView)
         view.addSubview(loader)
     }
     
     private func setupConstraints() {
-        emptyLabel.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        emptyLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        emptyLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        emptyLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        
         searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         searchBar.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
         searchBar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
         searchBar.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        
+        errorLabel.topAnchor.constraint(equalTo: searchBar.bottomAnchor).isActive = true
+        errorLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        errorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        errorLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
     
         tableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
@@ -178,8 +181,10 @@ extension MainViewViewController: MainViewDisplayLogic {
         viewState = .data
     }
     
-    func displayError() {
+    func displayError(with message: String) {
         viewState = .error
+        errorLabel.text = message
+        searchBar.isHidden = false
     }
     
     func openPost(with id: Int16) {
@@ -190,6 +195,14 @@ extension MainViewViewController: MainViewDisplayLogic {
     
     func removePostSelection() {
         delegate?.loadPost(with: nil)
+    }
+    
+    func restoreSelection(at index: IndexPath) {
+        tableView.selectRow(at: index, animated: true, scrollPosition: .middle)
+    }
+    
+    func resetSearch() {
+        searchBar.text = nil
     }
 }
 

@@ -31,7 +31,7 @@ final class MainViewDisplayLogicMock: MainViewDisplayLogic {
     }
     
     var displayErrorCallsCount = 0
-    func displayError() {
+    func displayError(with message: String) {
         displayErrorCallsCount += 1
     }
     
@@ -43,5 +43,13 @@ final class MainViewDisplayLogicMock: MainViewDisplayLogic {
     var removePostSelectionCallsCount = 0
     func removePostSelection() {
         removePostSelectionCallsCount += 1
+    }
+    
+    func restoreSelection(at index: IndexPath) {
+        // noop
+    }
+    
+    func resetSearch() {
+        // noop
     }
 }

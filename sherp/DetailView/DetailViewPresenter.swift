@@ -38,8 +38,11 @@ final class DetailViewPresenter {
         
         sections.append(detailSection)
         
+        let albums = (post.user?.albums?.allObjects as? [Album] ?? [])
+            .sorted(by: { $0.id < $1.id })
+        
         sections.append(
-            contentsOf: (post.user?.albums?.allObjects as? [Album] ?? []).map { album in
+            contentsOf: albums.map { album in
                 let header = Header(title: album.title ?? "-- Missing title --", body: nil, isDetails: false, isExpanded: false)
                 let photos = album.photos?.allObjects as? [Photo] ?? []
                 let displayPhotos = photos.map { PhotoElement(thumbnailURL: $0.thumbnailUrl, fullURL: $0.url) }
@@ -96,7 +99,7 @@ extension DetailViewPresenter: DetailViewBusinessLogic {
     }
     
     func selectedImage(at index: IndexPath) {
-        guard let url = presentedElements[index.section].items[index.item].thumbnailURL else { return }
+        guard let url = presentedElements[index.section].items[index.item].fullURL else { return }
         
         viewController?.displayImage(with: url)
     }

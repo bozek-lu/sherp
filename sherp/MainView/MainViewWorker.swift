@@ -51,19 +51,41 @@ final class MainViewWorker {
     
     private func combine(posts: [PostModel], users: [UserModel],
                          albums: [AlbumModel], photos: [PhotoModel],
-                         completion: (Result<[MainViewModels.Post], PostError>) -> Void) {
+                         completion: @escaping (Result<[MainViewModels.Post], PostError>) -> Void) {
         let posts: [PostModel] = posts.map {
             var post = $0
             post.user = users.first(where: { $0.id == post.userId })
             return post
+        }.sorted(by: { $0.id < $1.id })
+        let postModels = mapToViewModels(posts: posts)
+        if postModels.isEmpty {
+            getPersistedPosts(completion: completion)
+        } else {
+            completion(.success(postModels))
+            persistencyWorker.saveAndMerge(posts: posts, users: users,
+                                           albums: albums, photos: photos)
         }
-        let postModels = posts.map {
+    }
+    
+    private func mapToViewModels(posts: [PostModel]) -> [MainViewModels.Post] {
+        posts.map {
             MainViewModels.Post(id: $0.id, title: $0.title ?? "-- Missing title --",
                                 email: $0.user?.email ?? "-- Missing email --")
         }
-        completion(postModels.isEmpty ? .failure(.fetchingFail) : .success(postModels))
-        persistencyWorker.saveAndMerge(posts: posts, users: users,
-                                       albums: albums, photos: photos)
+    }
+    
+    private func getPersistedPosts(completion: @escaping (Result<[MainViewModels.Post], PostError>) -> Void) {
+        persistencyWorker.getAllPosts { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .failure(let error):
+                completion(.failure(error))
+            case .success(let posts):
+                let postModels = posts.map { PostModel(from: $0) }.sorted(by: { $0.id < $1.id })
+                let viewModels = self.mapToViewModels(posts: postModels)
+                completion(postModels.isEmpty ? .failure(.fetchingFail) : .success(viewModels))
+            }
+        }
     }
 }
 

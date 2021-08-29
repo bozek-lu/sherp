@@ -183,7 +183,11 @@ extension DetailViewViewController: DetailViewDisplayLogic {
     func displayImage(with url: URL) {
         let imageController = ImageViewController(imageURL: url, imageLoader: ImageLoader.shared)
         
-        navigationController?.pushViewController(imageController, animated: true)
+        if let navController = navigationController {
+            navController.pushViewController(imageController, animated: true)
+        } else {
+            present(imageController, animated: true, completion: nil)
+        }
     }
 }
 

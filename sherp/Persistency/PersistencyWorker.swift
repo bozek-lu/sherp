@@ -14,6 +14,7 @@ protocol PersistencyProtocol {
     func removePost(with id: Int16)
     func saveAndMerge(posts: [PostModel], users: [UserModel],
                       albums: [AlbumModel], photos: [PhotoModel])
+    func getAllPosts(completion: @escaping (Result<[Post], PostError>) -> Void)
 }
 
 final class PersistencyWorker {
@@ -176,6 +177,21 @@ extension PersistencyWorker: PersistencyProtocol {
                 }
             } catch {
                 print("Failed to save to Core Data: \(error).")
+            }
+        }
+    }
+    
+    func getAllPosts(completion: @escaping (Result<[Post], PostError>) -> Void) {
+        let context = managedObjectContext
+        context.perform {
+            let fetchRequest: NSFetchRequest<Post> = Post.fetchRequest()
+            
+            do {
+                let managed = try context.fetch(fetchRequest)
+                completion(managed.isEmpty ? .failure(.dbFail) : .success(managed))
+            } catch {
+                completion(.failure(.dbFail))
+                print("Failed to get post with error: \(error)")
             }
         }
     }
