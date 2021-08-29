@@ -8,9 +8,27 @@
 import Foundation
 
 protocol MainViewBusinessLogic {
+    /// Starts process of fetching ViewModels that will be displayed.
+    /// On success: fetched models are displayed, search is cleared
+    /// and if post was selected it will be selected again
     func fetchViewModels()
+    
+    /// Sets selected post ID and opens that post
+    ///
+    /// - Parameters:
+    ///     - row: The *row* that was tapped in table view.
     func selectedPost(at row: Int)
+    
+    /// Used when something was typed in search bar
+    ///
+    /// - Parameters:
+    ///     - string: String was typed in search bar.
     func searchDidChange(string: String)
+    
+    /// Deleting post was triggered
+    ///
+    /// - Parameters:
+    ///     - row: The *row* that was removed in table view.
     func deletePost(at row: Int)
 }
 
@@ -20,6 +38,7 @@ final class MainViewPresenter {
     
     weak var viewController: MainViewDisplayLogic?
     
+    ///
     private var filterString = ""
     private var displayedPosts = [MainViewModels.Post]()
     private var filteredPosts = [MainViewModels.Post]()
@@ -30,8 +49,11 @@ final class MainViewPresenter {
     }
     
     private func updateResults() {
+        // If search string is empty we should end filtering results
+        // In case that any post was selected try to re-select it
         if filterString.isEmpty {
             viewController?.display(posts: displayedPosts)
+            reSelectPostIfNeeded()
             return
         }
         
@@ -39,6 +61,7 @@ final class MainViewPresenter {
             $0.title.lowercased().contains(filterString.lowercased())
         }
         
+        // Displaying empty state message if results list is empty
         filteredPosts.isEmpty
             ? viewController?.displayError(with: "No posts for phrase:\n\"\(filterString)\"")
             : viewController?.display(posts: filteredPosts)

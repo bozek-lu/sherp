@@ -8,11 +8,34 @@
 import UIKit
 
 protocol MainViewDisplayLogic: AnyObject {
+    /// Display posts in table view.
+    ///
+    /// - Parameters:
+    ///   - posts: Models used to populate post cells.
     func display(posts: [MainViewModels.Post])
+    
+    /// Use to hide posts and display error label with provided message.
+    ///
+    /// - Parameters:
+    ///   - message: *Message* that should be displayed to user.
     func displayError(with message: String)
+    
+    /// Will pass post ID to detail view delegate.
+    ///
+    /// - Parameters:
+    ///   - id: Post identifier.
     func openPost(with id: Int16)
+    
+    /// Will clear details view if any post is displayed there.
     func removePostSelection()
+    
+    /// Set cell with specified index as selected.
+    ///
+    /// - Parameters:
+    ///   - index: IndexPath that should be selected.
     func restoreSelection(at index: IndexPath)
+    
+    /// Clears search bar text.
     func resetSearch()
 }
 
@@ -23,6 +46,10 @@ enum ViewState {
 }
 
 protocol MainViewDelegateProtocol: AnyObject {
+    /// Delegate method that loads post with specified ID
+    ///
+    /// - Parameters:
+    ///   - id: Post identifier.
     func loadPost(with id: Int16?)
 }
 
@@ -158,6 +185,7 @@ final class MainViewViewController: UIViewController {
         )
     }
     
+    /// Selector used when app becomes active again
     @objc private func appBecomeActive() {
         presenter?.fetchViewModels()
     }
@@ -169,6 +197,7 @@ final class MainViewViewController: UIViewController {
 
 extension MainViewViewController: UITextFieldDelegate {
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
+        // We have to detect if user clears search text in order to display all results again
         presenter?.searchDidChange(string: textField.text ?? "")
         return true
     }

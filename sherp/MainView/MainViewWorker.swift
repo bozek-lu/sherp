@@ -9,7 +9,18 @@ import Foundation
 import Combine
 
 protocol MainViewWorkerProtocol {
+    /// Fetch all posts related data
+    /// Uses *Publishers.Zip4* to merge all fetching request results
+    ///
+    /// - Parameters:
+    ///     - completion: Callback with result.
+    /// - Returns: *Result* with array of *MainViewModels.Post* or *PostError*
     func fetchData(completion: @escaping (Result<[MainViewModels.Post], PostError>) -> Void)
+    
+    /// Remove post
+    ///
+    /// - Parameters:
+    ///   - id: Identifier of post that will be removed.
     func removePost(with id: Int16)
 }
 
@@ -18,12 +29,15 @@ final class MainViewWorker {
     private let httpClient: HTTPClientProtocol
     private let persistencyWorker: PersistencyProtocol
     
+    /// Storing all Combine publishers here.
     private var cancellable = [AnyCancellable]()
     
     init(httpClient: HTTPClientProtocol, persistencyWorker: PersistencyProtocol) {
         self.httpClient = httpClient
         self.persistencyWorker = persistencyWorker
     }
+    
+    // MARK: Generic fetch functions
     
     private func fetchPosts() -> AnyPublisher<[PostModel], Never> {
         fetch(.posts)
@@ -49,6 +63,13 @@ final class MainViewWorker {
             .eraseToAnyPublisher()
     }
     
+    // MARK: Handling fetched models
+    
+    /// Combine all fetched data into models.
+    /// First creates ViewModels used to populate post cells
+    /// then raw models are persisted
+    ///
+    /// In case there is no results from the web persisted models are fetched
     private func combine(posts: [PostModel], users: [UserModel],
                          albums: [AlbumModel], photos: [PhotoModel],
                          completion: @escaping (Result<[MainViewModels.Post], PostError>) -> Void) {

@@ -8,10 +8,34 @@
 import UIKit
 
 protocol ImageCacheProtocol: AnyObject {
+    /// Get image from cache using it's URL.
+    ///
+    /// - Parameters:
+    ///     - url: URL used to find image cache.
+    /// - Returns: Optional UIImage
     func image(for url: URL) -> UIImage?
+    
+    /// Save UIImage in cache using it's URL as a key.
+    ///
+    /// - Parameters:
+    ///     - image: UIImage that will be saved.
+    ///     - url: Image URL.
     func insertImage(_ image: UIImage?, for url: URL)
+    
+    /// Remove image with specified URL from cache.
+    ///
+    /// - Parameters:
+    ///     - url: URL used to find image cache.
     func removeImage(for url: URL)
+    
+    /// Clear all images cache.
     func removeAllImages()
+    
+    /// Subscript object to get access to cache.
+    ///
+    /// - Parameters:
+    ///     - url: URL used to find image cache.
+    /// - Returns: Optional UIImage
     subscript(_ url: URL) -> UIImage? { get set }
 }
 
