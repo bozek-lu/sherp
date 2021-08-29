@@ -23,6 +23,7 @@ final class MainViewPresenter {
     private var filterString = ""
     private var displayedPosts = [MainViewModels.Post]()
     private var filteredPosts = [MainViewModels.Post]()
+    private var selectedPostId: Int16?
     
     init(worker: MainViewWorkerProtocol) {
         self.worker = worker
@@ -43,6 +44,12 @@ final class MainViewPresenter {
     
     private func post(at row: Int) -> MainViewModels.Post {
         filterString.isEmpty ? displayedPosts[row] : filteredPosts[row]
+    }
+    
+    private func removePost(with id: Int16, from posts: inout [MainViewModels.Post]) {
+        if let filteredIndex = posts.firstIndex(where: { $0.id == id }) {
+            posts.remove(at: filteredIndex)
+        }
     }
 }
 
@@ -65,7 +72,9 @@ extension MainViewPresenter: MainViewBusinessLogic {
     }
     
     func selectedPost(at row: Int) {
-        viewController?.openPost(with: post(at: row).id)
+        let postId = post(at: row).id
+        viewController?.openPost(with: postId)
+        selectedPostId = postId
     }
     
     func searchDidChange(string: String) {
@@ -74,6 +83,14 @@ extension MainViewPresenter: MainViewBusinessLogic {
     }
     
     func deletePost(at row: Int) {
-        worker.removePost(with: post(at: row).id)
+        let postId = post(at: row).id
+        worker.removePost(with: postId)
+        removePost(with: postId, from: &displayedPosts)
+        removePost(with: postId, from: &filteredPosts)
+        
+        if postId == selectedPostId {
+            viewController?.removePostSelection()
+            selectedPostId = nil
+        }
     }
 }

@@ -11,6 +11,7 @@ protocol MainViewDisplayLogic: AnyObject {
     func display(posts: [MainViewModels.Post])
     func displayError()
     func openPost(with id: Int16)
+    func removePostSelection()
 }
 
 enum ViewState {
@@ -20,7 +21,7 @@ enum ViewState {
 }
 
 protocol MainViewDelegateProtocol: AnyObject {
-    func loadPost(with id: Int16)
+    func loadPost(with id: Int16?)
 }
 
 final class MainViewViewController: UIViewController {
@@ -185,6 +186,10 @@ extension MainViewViewController: MainViewDisplayLogic {
         guard let vc = delegate as? UIViewController else { return }
         showDetailViewController(vc, sender: false)
         delegate?.loadPost(with: id)
+    }
+    
+    func removePostSelection() {
+        delegate?.loadPost(with: nil)
     }
 }
 
