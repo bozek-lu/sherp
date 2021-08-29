@@ -60,5 +60,5 @@ should take that, otherwise load from web and update the photo cell.
 
 Two elements from list were not fixed, I don't have iPad with me and I can't reproduce constraint errors. Second issue is missing loader at first fetching of posts, It is loading quite fast for me but I still can see it
 ![](https://user-images.githubusercontent.com/5692182/131255297-a657d3d7-4939-4dab-83ab-14d6571baa65.png)
-- [ ] ~~failed item~~ Several constraints errors when running on the iPad
-- [ ] ~~failed item~~ The spinner (loader) during initial load (i.e. while data is being fetched) isn't visible; (user is left staring at a view with "Challenge accepted" label)
+- [x] Several constraints errors when running on the iPad
+- [x] The spinner (loader) during initial load (i.e. while data is being fetched) isn't visible; (user is left staring at a view with "Challenge accepted" label)
