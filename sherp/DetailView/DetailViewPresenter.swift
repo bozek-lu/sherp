@@ -61,6 +61,9 @@ extension DetailViewPresenter: DetailViewBusinessLogic {
             viewController?.displayError(with: "Post deleted\nPlease pick different one")
             return
         }
+        if presentedElements.isEmpty {
+            viewController?.startLoading()
+        }
         worker.fetchPost(with: id) { [weak self] result in
             guard let self = self else { return }
             switch result {
