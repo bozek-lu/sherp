@@ -8,7 +8,7 @@
 import UIKit
 
 protocol DetailViewDisplayLogic: AnyObject {
-    func display(postDetails: [Section<Header, [PhotoElement]>])
+    func display(postDetails: [Section<Header, [PhotoElement]>], resetOffset: Bool)
     func displayError(with message: String)
     func displayImage(with url: URL)
 }
@@ -162,12 +162,15 @@ final class DetailViewViewController: UIViewController {
 }
 
 extension DetailViewViewController: DetailViewDisplayLogic {
-    func display(postDetails: [Section<Header, [PhotoElement]>]) {
+    func display(postDetails: [Section<Header, [PhotoElement]>], resetOffset: Bool) {
         loader.stopAnimating()
         collectionView.isHidden = false
         messageLabel.isHidden = true
         postElements = postDetails
         reloadData()
+        if resetOffset {
+            collectionView.setContentOffset(.zero, animated: false)
+        }
     }
     
     func displayError(with message: String) {
@@ -185,7 +188,7 @@ extension DetailViewViewController: DetailViewDisplayLogic {
 }
 
 extension DetailViewViewController: MainViewDelegateProtocol {
-    func loadPost(with id: Int16) {
+    func loadPost(with id: Int16?) {
         collectionView.isHidden = true
         messageLabel.isHidden = true
         loader.startAnimating()

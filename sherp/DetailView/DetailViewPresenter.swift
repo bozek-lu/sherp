@@ -9,7 +9,7 @@ import UIKit
 import Combine
 
 protocol DetailViewBusinessLogic {
-    func load(post id: Int16)
+    func load(post id: Int16?)
     func handleExpand(on index: Int)
     func loadImage(for index: IndexPath, completion: @escaping (UIImage?) -> Void)
     func cancelImageLoad(for url: URL?)
@@ -53,14 +53,18 @@ final class DetailViewPresenter {
 }
 
 extension DetailViewPresenter: DetailViewBusinessLogic {
-    func load(post id: Int16) {
+    func load(post id: Int16?) {
+        guard let id = id else {
+            viewController?.displayError(with: "Post deleted\nPlease pick different one")
+            return
+        }
         worker.fetchPost(with: id) { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let post):
                 self.presentedElements = self.parseToSections(post)
                 DispatchQueue.main.async {
-                    self.viewController?.display(postDetails: self.presentedElements)
+                    self.viewController?.display(postDetails: self.presentedElements, resetOffset: true)
                 }
             case .failure(let error):
                 DispatchQueue.main.async {
@@ -73,7 +77,7 @@ extension DetailViewPresenter: DetailViewBusinessLogic {
     func handleExpand(on index: Int) {
         presentedElements[index].headerItem.isExpanded.toggle()
         DispatchQueue.main.async {
-            self.viewController?.display(postDetails: self.presentedElements)
+            self.viewController?.display(postDetails: self.presentedElements, resetOffset: false)
         }
     }
     

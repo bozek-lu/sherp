@@ -83,9 +83,11 @@ class MainViewPresenterTests: XCTestCase {
         sut.searchDidChange(string: "eSt 4")
         
         // When
+        sut.selectedPost(at: 0)
         sut.deletePost(at: 0)
         
         // Then
-        XCTAssert(worker.removePostReceivedId  == 4)
+        XCTAssert(worker.removePostReceivedId == 4)
+        XCTAssert(viewController.removePostSelectionCallsCount == 1)
     }
 }

@@ -39,4 +39,9 @@ final class MainViewDisplayLogicMock: MainViewDisplayLogic {
     func openPost(with id: Int16) {
         openPostReceivedID = id
     }
+    
+    var removePostSelectionCallsCount = 0
+    func removePostSelection() {
+        removePostSelectionCallsCount += 1
+    }
 }
