@@ -8,9 +8,26 @@
 import UIKit
 
 protocol DetailViewDisplayLogic: AnyObject {
+    /// Update collection view with details of post.
+    ///
+    /// - Parameters:
+    ///     - postDetails: Generic section elements to display.
+    ///     - resetOffset: Bool. if true reset content offset of collection view to *CGPoint.zero*.
     func display(postDetails: [Section<Header, [PhotoElement]>], resetOffset: Bool)
+    
+    /// Display error state to user.
+    ///
+    /// - Parameters:
+    ///     - message: String that will be displayed to user.
     func displayError(with message: String)
+    
+    /// Display fullscreen image from passed URL.
+    ///
+    /// - Parameters:
+    ///     - url: Image URL.
     func displayImage(with url: URL)
+    
+    /// Update UI with loading screen.
     func startLoading()
 }
 

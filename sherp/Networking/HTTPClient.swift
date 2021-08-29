@@ -23,6 +23,11 @@ enum RequestError: Error {
 }
 
 protocol HTTPClientProtocol {
+    /// Start http request.
+    ///
+    /// - Parameters:
+    ///     - request: URLRequestConvertible used to make *URLRequest*
+    /// - Returns: Publisher with *HTTPResponse*
     func httpTask(with request: URLRequestConvertible) -> AnyPublisher<HTTPResponse, Error>
 }
 

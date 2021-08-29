@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
-    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <device id="ipad12_9rounded" orientation="portrait" layout="fullscreen" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -12,21 +12,22 @@
             <objects>
                 <viewController id="01J-lp-oVM" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Challenge Accepted!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pJB-Ab-3Bq">
-                                <rect key="frame" x="128" y="443" width="158" height="20.5"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="start" translatesAutoresizingMaskIntoConstraints="NO" id="vmR-C2-4So">
+                                <rect key="frame" x="428.5" y="589.5" width="167" height="167"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="167" id="2hc-89-4zD"/>
+                                    <constraint firstAttribute="height" constant="167" id="RVe-b3-62i"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="pJB-Ab-3Bq" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="Ja3-6y-C2G"/>
-                            <constraint firstItem="pJB-Ab-3Bq" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="VMp-J4-Wt4"/>
+                            <constraint firstItem="vmR-C2-4So" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="4wi-dW-rGr"/>
+                            <constraint firstItem="vmR-C2-4So" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="qsU-kP-ZFw"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -35,4 +36,7 @@
             <point key="canvasLocation" x="53" y="375"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="start" width="167" height="167"/>
+    </resources>
 </document>

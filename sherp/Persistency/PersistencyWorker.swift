@@ -9,11 +9,38 @@ import Foundation
 import CoreData
 
 protocol PersistencyProtocol {
+    /// Save current database context.
     func save()
+    
+    /// Fetch post from database.
+    ///
+    /// - Parameters:
+    ///     - id: Post Identifier.
+    ///     - completion: Callback with result.
+    /// - Returns: *Result* with array of *MainViewModels.Post* or *PostError*
     func post(with id: Int16, completion: @escaping (Result<Post, PostError>) -> Void)
+    
+    /// Remove post from database.
+    ///
+    /// - Parameters:
+    ///     - id: Post Identifier.
     func removePost(with id: Int16)
+    
+    /// Merge posts, users, albums and photos and save in database..
+    ///
+    /// - Parameters:
+    ///     - posts: Array of PostModel elements.
+    ///     - users: Array of UserModel elements.
+    ///     - albums: Array of AlbumModel elements.
+    ///     - photos: Array of PhotoModel elements.
     func saveAndMerge(posts: [PostModel], users: [UserModel],
                       albums: [AlbumModel], photos: [PhotoModel])
+    
+    /// Fetch all posts from database.
+    ///
+    /// - Parameters:
+    ///     - completion: Callback with result.
+    /// - Returns: *Result* with array of *Post* elements or *PostError*
     func getAllPosts(completion: @escaping (Result<[Post], PostError>) -> Void)
 }
 

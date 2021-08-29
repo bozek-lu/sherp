@@ -9,10 +9,36 @@ import UIKit
 import Combine
 
 protocol DetailViewBusinessLogic {
+    /// Starts fetching post from database and displays it.
+    ///
+    /// - Parameters:
+    ///     - id: Identifier of post.
     func load(post id: Int16?)
+    
+    /// Expand or collapse album section.
+    ///
+    /// - Parameters:
+    ///     - index: IndexPath of selected element in collection view.
     func handleExpand(on index: Int)
+    
+    /// When cell with image will be displayed we start loading image.
+    ///
+    /// - Parameters:
+    ///     - index: IndexPath of image that should be loaded.
+    ///     - completion: Callback with optional UIImage if loading succeeds.
     func loadImage(for index: IndexPath, completion: @escaping (UIImage?) -> Void)
+    
+    /// In case that image starts to load and is no longer needed
+    /// we can cancel this process.
+    ///
+    /// - Parameters:
+    ///     - url: URL that should stop loading.
     func cancelImageLoad(for url: URL?)
+    
+    /// Handles opening of the selected image.
+    ///
+    /// - Parameters:
+    ///     - index: IndexPath of selected element in collection view.
     func selectedImage(at index: IndexPath)
 }
 

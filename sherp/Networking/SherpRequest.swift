@@ -8,9 +8,16 @@
 import Foundation
 
 enum SherpRequest: String {
+    /// Request to fetch all posts
     case posts
+    
+    /// Request to fetch all users
     case users
+    
+    /// Request to fetch all albums
     case albums
+    
+    /// Request to fetch all photos
     case photos
 }
 
