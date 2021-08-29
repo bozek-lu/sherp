@@ -51,6 +51,7 @@ final class PostPhotoCell: UICollectionViewCell {
 extension PostPhotoCell {
     private func setupViews() {
         contentView.addSubview(imageView)
+        imageView.backgroundColor = .darkGray
         imageView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(loader)
     }

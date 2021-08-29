@@ -26,7 +26,7 @@ final class PostAlbumHeader: UICollectionReusableView {
     }()
     
     private lazy var expandImage: UIImageView = {
-        let view = UIImageView(image: UIImage(named: "chevron")?.withRenderingMode(.alwaysTemplate))
+        let view = UIImageView(image: UIImage(named: "chevron"))
         view.tintColor = .white
         view.translatesAutoresizingMaskIntoConstraints = false
         return view

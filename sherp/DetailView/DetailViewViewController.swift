@@ -11,6 +11,7 @@ protocol DetailViewDisplayLogic: AnyObject {
     func display(postDetails: [Section<Header, [PhotoElement]>], resetOffset: Bool)
     func displayError(with message: String)
     func displayImage(with url: URL)
+    func startLoading()
 }
 
 final class DetailViewViewController: UIViewController {
@@ -183,15 +184,22 @@ extension DetailViewViewController: DetailViewDisplayLogic {
     func displayImage(with url: URL) {
         let imageController = ImageViewController(imageURL: url, imageLoader: ImageLoader.shared)
         
-        navigationController?.pushViewController(imageController, animated: true)
+        if let navController = navigationController {
+            navController.pushViewController(imageController, animated: true)
+        } else {
+            present(imageController, animated: true, completion: nil)
+        }
+    }
+    
+    func startLoading() {
+        collectionView.isHidden = true
+        messageLabel.isHidden = true
+        loader.startAnimating()
     }
 }
 
 extension DetailViewViewController: MainViewDelegateProtocol {
     func loadPost(with id: Int16?) {
-        collectionView.isHidden = true
-        messageLabel.isHidden = true
-        loader.startAnimating()
         presenter?.load(post: id)
     }
 }

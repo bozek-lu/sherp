@@ -39,7 +39,9 @@ final class MainViewPresenter {
             $0.title.lowercased().contains(filterString.lowercased())
         }
         
-        viewController?.display(posts: filteredPosts)
+        filteredPosts.isEmpty
+            ? viewController?.displayError(with: "No posts for phrase:\n\"\(filterString)\"")
+            : viewController?.display(posts: filteredPosts)
     }
     
     private func post(at row: Int) -> MainViewModels.Post {
@@ -50,6 +52,15 @@ final class MainViewPresenter {
         if let filteredIndex = posts.firstIndex(where: { $0.id == id }) {
             posts.remove(at: filteredIndex)
         }
+    }
+    
+    private func reSelectPostIfNeeded() {
+        guard let postId = self.selectedPostId,
+              let index = displayedPosts.firstIndex(where: { $0.id == postId }) else {
+            return
+        }
+        
+        viewController?.restoreSelection(at: IndexPath(row: index, section: 0))
     }
 }
 
@@ -62,10 +73,12 @@ extension MainViewPresenter: MainViewBusinessLogic {
                 self.displayedPosts = models
                 DispatchQueue.main.async {
                     self.viewController?.display(posts: models)
+                    self.viewController?.resetSearch()
+                    self.reSelectPostIfNeeded()
                 }
             case .failure:
                 DispatchQueue.main.async {
-                    self.viewController?.displayError()
+                    self.viewController?.displayError(with: "Failed to fetch")
                 }
             }
         }

@@ -33,7 +33,7 @@ final class DetailWorkerProtocolMock: DetailWorkerProtocol {
 final class DetailViewDisplayLogicMock: DetailViewDisplayLogic {
     var displayPostDetailsReceivedValue: [Section<Header, [PhotoElement]>] = []
     var receivedPostDetailsClosure: (([Section<Header, [PhotoElement]>]) -> Void)?
-    func display(postDetails: [Section<Header, [PhotoElement]>]) {
+    func display(postDetails: [Section<Header, [PhotoElement]>], resetOffset: Bool) {
         displayPostDetailsReceivedValue = postDetails
         receivedPostDetailsClosure?(postDetails)
     }
