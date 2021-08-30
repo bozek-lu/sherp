@@ -55,6 +55,7 @@
 		89D1716C26C01B3F001A399B /* MainViewModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D1716B26C01B3F001A399B /* MainViewModels.swift */; };
 		89D1716F26C01E1F001A399B /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D1716E26C01E1F001A399B /* ImageViewController.swift */; };
 		89D1717226C022AE001A399B /* MainViewPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D1717126C022AE001A399B /* MainViewPresenterTests.swift */; };
+		89E7759F26DCD57800D9A16E /* DetailViewRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E7759E26DCD57800D9A16E /* DetailViewRouter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -129,6 +130,7 @@
 		89D1716B26C01B3F001A399B /* MainViewModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModels.swift; sourceTree = "<group>"; };
 		89D1716E26C01E1F001A399B /* ImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
 		89D1717126C022AE001A399B /* MainViewPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewPresenterTests.swift; sourceTree = "<group>"; };
+		89E7759E26DCD57800D9A16E /* DetailViewRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewRouter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -327,6 +329,7 @@
 				89B4E11E26B87CC00081C2B9 /* DetailViewPresenter.swift */,
 				892CEA0526BDD01B0081CD18 /* DetailViewWorker.swift */,
 				89D1716426BFD23F001A399B /* DetailViewModels.swift */,
+				89E7759E26DCD57800D9A16E /* DetailViewRouter.swift */,
 			);
 			path = DetailView;
 			sourceTree = "<group>";
@@ -520,6 +523,7 @@
 				892CEA0926BDD67C0081CD18 /* UITableView+Ext.swift in Sources */,
 				89B4E11326B86C6E0081C2B9 /* HTTPClient.swift in Sources */,
 				89D1716C26C01B3F001A399B /* MainViewModels.swift in Sources */,
+				89E7759F26DCD57800D9A16E /* DetailViewRouter.swift in Sources */,
 				89B4DE0B26B7FD9A0081C2B9 /* sherp.xcdatamodeld in Sources */,
 				89B4E0EE26B85AB50081C2B9 /* PostModel.swift in Sources */,
 				892CE9D026BDB4DE0081CD18 /* PostCell.swift in Sources */,

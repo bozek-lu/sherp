@@ -34,6 +34,7 @@ protocol DetailViewDisplayLogic: AnyObject {
 final class DetailViewViewController: UIViewController {
     
     var presenter: DetailViewBusinessLogic?
+    var router: DetailViewRoutingLogic?
     
     private lazy var loader: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView(style: .large)
@@ -199,13 +200,7 @@ extension DetailViewViewController: DetailViewDisplayLogic {
     }
     
     func displayImage(with url: URL) {
-        let imageController = ImageViewController(imageURL: url, imageLoader: ImageLoader.shared)
-        
-        if let navController = navigationController {
-            navController.pushViewController(imageController, animated: true)
-        } else {
-            present(imageController, animated: true, completion: nil)
-        }
+        router?.routeToImage(with: url)
     }
     
     func startLoading() {

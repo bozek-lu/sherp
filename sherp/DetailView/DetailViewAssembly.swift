@@ -12,7 +12,10 @@ final class DetailViewAssembly {
         let controller = DetailViewViewController()
         let worker = DetailViewWorker(persistency: PersistencyWorker.shared, imageLoader: ImageLoader.shared)
         let presenter = DetailViewPresenter(worker: worker)
-
+        let router = DetailViewRouter()
+        
+        controller.router = router
+        router.viewController = controller
         controller.presenter = presenter
         presenter.viewController = controller
         

@@ -23,7 +23,7 @@ Second part is `URLRequestConvertible` protocol that makes usage of enums as URL
 
 #### Persistency
 To handle persistency I've used  `PersistencyWorker` singleton that implements  `PersistencyProtocol` 
-This worker contains two `NSManagedObjectContext`, one to handle background/more time consuming tasks and second used to read data from.
+This worker contains two `NSManagedObjectContext`, one to handle background/more time consuming tasks and second used to read data from database.
 
 ## Requirements checklist
 #### Requirements
