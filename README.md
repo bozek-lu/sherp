@@ -1,6 +1,4 @@
-# sherp
-
-## Sherpany coding challenge
+# Sherpany coding challenge
 - No setup needed.
 
 ## Brief description
